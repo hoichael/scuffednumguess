@@ -1,9 +1,6 @@
 // set title, cause why not
 document.querySelector("title").textContent = "Guess the Number!";
 
-// define heading
-const headingEl = document.querySelector("#heading");
-
 // define form for user input
 const formParagraph = document.createElement("p");
 const formValue = "<form> <input type='text' id='guess-input'> <input type='submit' value='Submit' id='guess-submit'> </form>"
@@ -34,7 +31,7 @@ Init()
 
 function Init() // create buttons and heading
 {
-    headingEl.textContent = "Select your difficulty"
+    setHeading("Select your difficulty");
 }
 
 function InitGame(diff)
@@ -67,7 +64,7 @@ function InitGame(diff)
 function Game()
 {
     console.log("game() start");
-    headingEl.textContent = `You've chosen the ${difficulty} difficulty. Please enter a number between ${rangeStart} and ${rangeEnd}`;
+    setHeading(`You've chosen the ${difficulty} difficulty. Please enter a number between ${rangeStart} and ${rangeEnd}`);
 
     // TODO: hide buttons
     // remove buttons
@@ -121,11 +118,11 @@ function Result()
 
   if(generatedNum == actualInput)
   {
-    headingEl.textContent = `Impressive! The generated number was indeed ${generatedNum}!`;
+    setHeading(`Impressive! The generated number was indeed ${generatedNum}!`);
   }
   else
   {
-    headingEl.textContent = `Too bad! The generated number was ${generatedNum}!`;
+    setHeading(`Too bad! The generated number was ${generatedNum}!`);
   }
 
   let buttonReset = document.createElement("button");
@@ -137,4 +134,8 @@ function Result()
     buttonReset.remove();
     Init();
   });
+}
+
+function setHeading(newHeading) {
+    document.querySelector("#heading").innerText = newHeading;
 }
