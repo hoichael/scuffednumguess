@@ -2,34 +2,11 @@
 document.querySelector("title").textContent = "Guess the Number!";
 
 // define heading
-const Heading = document.createElement("h1");
-
-// define buttons
-const buttonEasy = document.createElement("button");
-buttonEasy.textContent = "Easy (1-3)"
-buttonEasy.id = "Easy"
-
-const buttonMedium = document.createElement("button");
-buttonMedium.textContent = "Medium (1-5)"
-buttonMedium.id = "Medium"
-
-const buttonHard = document.createElement("button");
-buttonHard.textContent = "Hard (1-10)"
-buttonHard.id = "Hard"
-
-// define button div
-const buttonDiv = document.createElement("div");
-buttonDiv.id = "button-div"
-
-// append heading
-document.querySelector("body").appendChild(Heading);
-
-// append button div
-document.querySelector("body").appendChild(buttonDiv);
+const headingEl = document.querySelector("#heading");
 
 // define form for user input
 const formParagraph = document.createElement("p");
-let formValue = "<form> <input type='text' id='guess-input'> <input type='submit' value='Submit' id='guess-submit'> </form>"
+const formValue = "<form> <input type='text' id='guess-input'> <input type='submit' value='Submit' id='guess-submit'> </form>"
 
 // global variables
 let id;
@@ -45,20 +22,19 @@ let actualInput;
 
 let generatedNum;
 
-// add button event listener
-document.querySelector("#button-div").addEventListener("click", function(e) {
-    InitGame(e.target.id);
-});
+// add button event listeners
+const buttons = document.querySelectorAll(".init-btn");
+for (let i = 0; i < buttons.length; i++) {
+    buttons[i].addEventListener("click", function(e) {
+        InitGame(e.target.getAttribute("data-difficulty"));
+    });
+}
 
 Init()
 
 function Init() // create buttons and heading
 {
-    Heading.textContent = "Select your difficulty"
-
-    document.querySelector("#button-div").appendChild(buttonEasy);
-    document.querySelector("#button-div").appendChild(buttonMedium);
-    document.querySelector("#button-div").appendChild(buttonHard);
+    headingEl.textContent = "Select your difficulty"
 }
 
 function InitGame(diff)
@@ -91,12 +67,13 @@ function InitGame(diff)
 function Game()
 {
     console.log("game() start");
-    Heading.textContent = `You've chosen the ${difficulty} difficulty. Please enter a number between ${rangeStart} and ${rangeEnd}`;
-    
+    headingEl.textContent = `You've chosen the ${difficulty} difficulty. Please enter a number between ${rangeStart} and ${rangeEnd}`;
+
+    // TODO: hide buttons
     // remove buttons
-    buttonEasy.remove();
-    buttonMedium.remove();
-    buttonHard.remove();
+    // buttonEasy.remove();
+    // buttonMedium.remove();
+    // buttonHard.remove();
 
     // append form
     document.querySelector("body").appendChild(formParagraph);
@@ -144,11 +121,11 @@ function Result()
 
   if(generatedNum == actualInput)
   {
-    Heading.textContent = `Impressive! The generated number was indeed ${generatedNum}!`;
+    headingEl.textContent = `Impressive! The generated number was indeed ${generatedNum}!`;
   }
   else
   {
-    Heading.textContent = `Too bad! The generated number was ${generatedNum}!`;
+    headingEl.textContent = `Too bad! The generated number was ${generatedNum}!`;
   }
 
   let buttonReset = document.createElement("button");
