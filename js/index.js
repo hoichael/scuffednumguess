@@ -46,7 +46,9 @@ let actualInput;
 let generatedNum;
 
 // add button event listener
-document.querySelector("#button-div").addEventListener("click", InitGame); 
+document.querySelector("#button-div").addEventListener("click", function(e) {
+    InitGame(e.target.id);
+});
 
 Init()
 
@@ -59,35 +61,31 @@ function Init() // create buttons and heading
     document.querySelector("#button-div").appendChild(buttonHard);
 }
 
-function InitGame(e)
+function InitGame(diff)
 {
-    
-      id = e.target.id;
-      difficulty = id;
-  
-      
-          switch(id) {
-              case "Easy":
-                  console.log("selected easy");
-                  rangeEnd = 3;
-                  Game();
-                break;
-              case "Medium":
-                  console.log("selected medium");
-                  rangeEnd = 5;
-                  Game();
-                break;
-              case "Hard":
-                  console.log("selected hard");
-                  rangeEnd = 10;
-                  Game();
-                break;  
-              default:
-                console.log("something's fucked or, most likely, clicked on empty space");
-                Init();
-            }
-          
-
+    // id = e.target.id;
+    // difficulty = id;
+    difficulty = diff;
+    switch(diff) {
+        case "Easy":
+            console.log("selected easy");
+            rangeEnd = 3;
+            Game();
+            break;
+        case "Medium":
+            console.log("selected medium");
+            rangeEnd = 5;
+            Game();
+            break;
+        case "Hard":
+            console.log("selected hard");
+            rangeEnd = 10;
+            Game();
+            break;
+        default:
+            console.log("something's fucked or, most likely, clicked on empty space");
+            Init();
+    }
 }
 
 function Game()
@@ -158,9 +156,8 @@ function Result()
   document.querySelector("body").appendChild(buttonReset);
 
   buttonReset.addEventListener("click", function()
-  {    
+  {
     buttonReset.remove();
     Init();
   });
-
 }
