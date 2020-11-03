@@ -31,13 +31,13 @@ Init()
 
 function Init() // create buttons and heading
 {
+    showButtons();
+
     setHeading("Select your difficulty");
 }
 
 function InitGame(diff)
 {
-    // id = e.target.id;
-    // difficulty = id;
     difficulty = diff;
     switch(diff) {
         case "Easy":
@@ -66,11 +66,7 @@ function Game()
     console.log("game() start");
     setHeading(`You've chosen the ${difficulty} difficulty. Please enter a number between ${rangeStart} and ${rangeEnd}`);
 
-    // TODO: hide buttons
-    // remove buttons
-    // buttonEasy.remove();
-    // buttonMedium.remove();
-    // buttonHard.remove();
+    hideButtons();
 
     // append form
     document.querySelector("body").appendChild(formParagraph);
@@ -138,4 +134,18 @@ function Result()
 
 function setHeading(newHeading) {
     document.querySelector("#heading").innerText = newHeading;
+}
+
+function showButtons() {
+    document.querySelectorAll(".init-btn")
+        .forEach(function(btn) {
+            btn.classList.remove("hide");
+        });
+}
+
+function hideButtons() {
+    document.querySelectorAll(".init-btn")
+        .forEach(function(btn) {
+            btn.classList.add("hide");
+        });
 }
