@@ -55,25 +55,24 @@ function Game(difficulty)
     const guessInput = document.querySelector("#guess-input");
     const guessSubmit = document.querySelector("#guess-submit");
 
-    guessSubmit.addEventListener("click", function()
+    guessSubmit.onclick = function() {
+        const actualInput = parseInt(guessInput.value);
+        if(!actualInput)
         {
-            const actualInput = parseInt(guessInput.value);
-            if(!actualInput)
-            {
-                console.log("INVALID (empty)");
-                alert("Invalid Input. Please enter a whole number within the expected range")
-            }
-            else if(actualInput < rangeStart || actualInput > rangeEnd)
-            {
-                console.log("INVALID (out of range)");
-                alert("Invalid Input. Please enter a whole number within the expected range");
-            }
-            else
-            {
-                console.log("init result()");
-                CheckResult(actualInput, generatedNum);
-            }
-        });
+            console.log("INVALID (empty)");
+            alert("Invalid Input. Please enter a whole number within the expected range")
+        }
+        else if(actualInput < rangeStart || actualInput > rangeEnd)
+        {
+            console.log("INVALID (out of range)");
+            alert("Invalid Input. Please enter a whole number within the expected range");
+        }
+        else
+        {
+            console.log("init result()");
+            CheckResult(actualInput, generatedNum);
+        }
+    };
 }
 
 function CheckResult(guess, generatedNum)
