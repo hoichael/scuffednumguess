@@ -1,3 +1,24 @@
 .hide {
     display: none;
 }
+
+body {
+    display: flex;
+    justify-content: center;
+    background-color: #282C34;
+    color: white;
+    font-family: monospace;
+    margin: 0;
+    padding: 64px;
+    height: 100%;
+}
+
+body > div {
+    max-width: 600px;
+}
+
+button {
+    background-color: black;
+    color: white;
+    padding: 8px 16px;
+}
