@@ -1,135 +1,94 @@
 // set title, cause why not
 document.querySelector("title").textContent = "Guess the Number!";
 
-// define form for user input
-const formParagraph = document.createElement("p");
-const formValue = "<form> <input type='text' id='guess-input'> <input type='submit' value='Submit' id='guess-submit'> </form>"
-
-// global variables
-let id;
-let difficulty;
-let rangeStart = 1;
-let rangeEnd;
-
-let guessInput;
-let guessSubmit;
-let form;
-
-let actualInput;
-
-let generatedNum;
-
 // add button event listeners
 const buttons = document.querySelectorAll(".init-btn");
 for (let i = 0; i < buttons.length; i++) {
     buttons[i].addEventListener("click", function(e) {
-        InitGame(e.target.getAttribute("data-difficulty"));
+        Game(e.target.getAttribute("data-difficulty"));
     });
 }
 
-Init()
+// set reset button event listener
+document.querySelector("#reset-btn").addEventListener("click", Init);
+
+Init();
 
 function Init() // create buttons and heading
 {
+    hideResetButton();
     showButtons();
-
     setHeading("Select your difficulty");
 }
 
-function InitGame(diff)
+function Game(difficulty)
 {
-    difficulty = diff;
-    switch(diff) {
+    let rangeStart = 1;
+    let rangeEnd;
+
+    switch (difficulty) {
         case "Easy":
             console.log("selected easy");
             rangeEnd = 3;
-            Game();
             break;
         case "Medium":
             console.log("selected medium");
             rangeEnd = 5;
-            Game();
             break;
         case "Hard":
             console.log("selected hard");
             rangeEnd = 10;
-            Game();
             break;
         default:
-            console.log("something's fucked or, most likely, clicked on empty space");
-            Init();
+            console.error("something's fucked or, most likely, clicked on empty space");
     }
-}
 
-function Game()
-{
+    const generatedNum = Math.floor(Math.random() * rangeEnd + rangeStart);
+
     console.log("game() start");
     setHeading(`You've chosen the ${difficulty} difficulty. Please enter a number between ${rangeStart} and ${rangeEnd}`);
 
     hideButtons();
 
-    // append form
-    document.querySelector("body").appendChild(formParagraph);
-    document.querySelector("p").innerHTML = formValue;
+    showGuessInput();
 
-    guessInput = document.querySelector("#guess-input");
-    guessSubmit = document.querySelector("#guess-submit");
-    form = document.querySelector("form");
+    const guessInput = document.querySelector("#guess-input");
+    const guessSubmit = document.querySelector("#guess-submit");
 
-    form.addEventListener("submit", function(e)
-    {
-        e.preventDefault();         
-        actualInput = parseInt(guessInput.value);
-        if(!actualInput)
+    guessSubmit.addEventListener("click", function()
         {
-          console.log("INVALID (empty)");
-          alert("Invalid Input. Please enter a whole number within the expected range")          
-          /* invalid = true;
-          Init();
-          document.querySelector("p").remove(); */
-        }
-        else if(isNaN(actualInput))
-        {
-          console.log("INVALID (NaN)");
-          alert("Invalid Input. Please enter a whole number within the expected range");
-        }
-        else if(actualInput < rangeStart || actualInput > rangeEnd)
-        {
-          console.log("INVALID (out of range)");
-          alert("Invalid Input. Please enter a whole number within the expected range");          
-        }
-        else
-        {
-          console.log("init result()");
-          document.querySelector("p").remove();
-          Result();
-        }
-    }); 
+            const actualInput = parseInt(guessInput.value);
+            if(!actualInput)
+            {
+                console.log("INVALID (empty)");
+                alert("Invalid Input. Please enter a whole number within the expected range")
+            }
+            else if(actualInput < rangeStart || actualInput > rangeEnd)
+            {
+                console.log("INVALID (out of range)");
+                alert("Invalid Input. Please enter a whole number within the expected range");
+            }
+            else
+            {
+                console.log("init result()");
+                CheckResult(actualInput, generatedNum);
+            }
+        });
 }
 
-function Result()
+function CheckResult(guess, generatedNum)
 {
-  generatedNum = Math.floor(Math.random() * rangeEnd + rangeStart);
-  console.log(`generated number: ${generatedNum}, DEBUG! No cheeterino >:(`);
+    if(generatedNum === guess)
+    {
+        setHeading(`Impressive! The generated number was indeed ${generatedNum}!`);
+    }
+    else
+    {
+        setHeading(`Too bad! The generated number was ${generatedNum}!`);
+    }
 
-  if(generatedNum == actualInput)
-  {
-    setHeading(`Impressive! The generated number was indeed ${generatedNum}!`);
-  }
-  else
-  {
-    setHeading(`Too bad! The generated number was ${generatedNum}!`);
-  }
-
-  let buttonReset = document.createElement("button");
-  buttonReset.textContent = "Back to difficulty select";
-  document.querySelector("body").appendChild(buttonReset);
-
-  buttonReset.addEventListener("click", function()
-  {
-    buttonReset.remove();
-    Init();
-  });
+    hideGuessInput();
+    showResetButton();
 }
 
 function setHeading(newHeading) {
@@ -148,4 +107,20 @@ function hideButtons() {
         .forEach(function(btn) {
             btn.classList.add("hide");
         });
+}
+
+function showGuessInput() {
+    document.querySelector("#guess").classList.remove("hide");
+}
+
+function hideGuessInput() {
+    document.querySelector("#guess").classList.add("hide");
+}
+
+function showResetButton() {
+    document.querySelector("#reset-btn").classList.remove("hide");
+}
+
+function hideResetButton() {
+    document.querySelector("#reset-btn").classList.add("hide");
 }
