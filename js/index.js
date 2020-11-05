@@ -12,13 +12,27 @@ for (let i = 0; i < buttons.length; i++) {
 // set reset button event listener
 document.querySelector("#reset-btn").addEventListener("click", Init);
 
+document.querySelector("#btn-play").addEventListener("click", difficultySelect);
+
+document.querySelector("#btn-history").addEventListener("click", historyPage);
+
 Init();
 
 function Init() // create buttons and heading
-{
+{    
+    if(!localStorage.getItem("iterations")) {
+        localStorage.setItem("iterations", -1);
+    }
+
+    showMenuButtons();
+    hideDifficultyButtons();
+    hideHistory();
+    // hideMenuButtons();
     hideResetButton();
-    showButtons();
-    setHeading("Select your difficulty");
+    // showButtons();
+    setHeading("Main Menu");
+    // setHeading("Select your difficulty");
+    hideGuessInput();
 }
 
 function Game(difficulty)
@@ -39,8 +53,6 @@ function Game(difficulty)
             console.log("selected hard");
             rangeEnd = 10;
             break;
-        default:
-            console.error("something's fucked or, most likely, clicked on empty space");
     }
 
     const generatedNum = Math.floor(Math.random() * rangeEnd + rangeStart);
@@ -48,7 +60,7 @@ function Game(difficulty)
     console.log("game() start");
     setHeading(`You've chosen the ${difficulty} difficulty. Please enter a number between ${rangeStart} and ${rangeEnd}`);
 
-    hideButtons();
+    hideDifficultyButtons();
 
     showGuessInput();
 
@@ -70,13 +82,32 @@ function Game(difficulty)
         else
         {
             console.log("init result()");
-            CheckResult(actualInput, generatedNum);
+            conclude(actualInput, generatedNum, difficulty);
         }
     };
 }
 
-function CheckResult(guess, generatedNum)
+function currentDate()
 {
+    let now = new Date();
+    let date = now.getFullYear()+'-'+(now.getMonth()+1)+'-'+now.getDate();
+    let time = now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds();
+    let fullDateTime = date+' '+time;
+    return fullDateTime;
+}
+
+function conclude(guess, generatedNum, difficulty)
+{
+    hideGuessInput();
+    showResetButton();
+
+    let info = {
+        Date: currentDate(),
+        Difficulty: difficulty,
+        YourGuess: guess,
+        GeneratedNumber : generatedNum
+    }
+    
     if(generatedNum === guess)
     {
         setHeading(`Impressive! The generated number was indeed ${generatedNum}!`);
@@ -86,7 +117,79 @@ function CheckResult(guess, generatedNum)
         setHeading(`Too bad! The generated number was ${generatedNum}!`);
     }
 
-    hideGuessInput();
+    localStorage.setItem("iterations", parseInt(localStorage.getItem("iterations")) +1);
+    localStorage.setItem(localStorage.getItem("iterations"), JSON.stringify(info));
+    console.log(info);
+}
+
+
+function genTableHead(table, data) {
+    
+    if(!document.querySelector("th"))
+    {
+        let tableHead = table.createTHead();
+        let tableRow = tableHead.insertRow();
+    
+        for (let key of data) {
+            let th = document.createElement("th");
+            let text = document.createTextNode(key);
+            th.appendChild(text);
+            tableRow.appendChild(th);
+        }
+    }
+}
+
+function popTable(table, data) {
+
+    let tableRows = table.querySelectorAll("tr");
+    for (let i = 0; i < tableRows.length; i++) {
+        tableRows[i].remove();
+    }
+
+    for (let element of data) {
+
+        let row = table.insertRow();
+        if (element.YourGuess == element.GeneratedNumber) {
+            row.id = "green";
+        }
+        else {
+            row.id = "red";
+        }
+        
+        for (key in element) {
+            let cell = row.insertCell();
+            let text = document.createTextNode(element[key]);
+            cell.appendChild(text);
+      }
+    }
+  }
+
+function historyPage() {
+    setHeading("History");
+    showHistory();
+    hideMenuButtons();
+    showResetButton();
+
+    let localStorageObjects = [];
+
+    for (let i = 0; i < localStorage.length; i++) {
+        if(localStorage[i] !== undefined) {
+            let temp = JSON.parse(localStorage[i]);
+            localStorageObjects.push(temp);
+        }      
+    }
+    
+    localStorageObjects.reverse();
+
+    let table = document.querySelector("#history-table");
+    popTable(table, localStorageObjects);
+    genTableHead(table, Object.keys(localStorageObjects[0]));
+}
+
+function difficultySelect() {
+    setHeading("Select your Difficulty");
+    showDifficultyButtons();
+    hideMenuButtons();
     showResetButton();
 }
 
@@ -94,14 +197,14 @@ function setHeading(newHeading) {
     document.querySelector("#heading").innerText = newHeading;
 }
 
-function showButtons() {
+function showDifficultyButtons() {
     document.querySelectorAll(".init-btn")
         .forEach(function(btn) {
             btn.classList.remove("hide");
         });
 }
 
-function hideButtons() {
+function hideDifficultyButtons() {
     document.querySelectorAll(".init-btn")
         .forEach(function(btn) {
             btn.classList.add("hide");
@@ -122,4 +225,20 @@ function showResetButton() {
 
 function hideResetButton() {
     document.querySelector("#reset-btn").classList.add("hide");
+}
+
+function hideHistory() {
+    document.querySelector("#history-table").classList.add("hide");
+}
+
+function showHistory() {
+    document.querySelector("#history-table").classList.remove("hide");
+}
+
+function hideMenuButtons() {
+    document.querySelector("#main-menu").classList.add("hide");
+}
+
+function showMenuButtons() {
+    document.querySelector("#main-menu").classList.remove("hide");
 }

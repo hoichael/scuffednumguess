@@ -2,6 +2,14 @@
     display: none;
 }
 
+#green {
+    color: rgb(0, 185, 0);
+}
+
+#red {
+    color: red;
+}
+
 body {
     display: flex;
     justify-content: center;
@@ -18,7 +26,22 @@ body > div {
 }
 
 button {
-    background-color: black;
-    color: white;
+    background-color: rgb(20, 20, 20);
+    color: rgb(236, 236, 236);
     padding: 8px 16px;
 }
+
+button:hover {
+    background-color: rgb(236, 236, 236);
+    color: rgb(20, 20, 20);
+}
+
+table, th, td {
+    border: 1px solid black;
+    width: 100%;
+  }
+
+  th, tr {
+    text-align: center;
+    padding: 2px 15px;
+  }
