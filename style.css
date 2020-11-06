@@ -3,11 +3,13 @@
 }
 
 #green {
-    color: rgb(0, 185, 0);
+    color: black;
+    background-color: rgb(0, 185, 0);
 }
 
 #red {
-    color: red;
+    color: black;
+    background-color: red;
 }
 
 body {
@@ -39,9 +41,16 @@ button:hover {
 table, th, td {
     border: 1px solid black;
     width: 100%;
+    font-size: 16px;
+    margin: 4px;
+    font-weight: bold;
   }
 
   th, tr {
     text-align: center;
     padding: 2px 15px;
+  }
+
+  th {
+      background-color: rgb(20, 20, 20);
   }
